@@ -6,21 +6,29 @@ const MarketsList = (props)=>{
 
     const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
 
-    useEffect(()=>{
-        let arr = sample.marketSummaryResponse.result;
-            setMarketData(arr);
-        },[])
-
     const getInfo = async ()=>{
-        let url = 'https://randomuser.me/api/';
-        const response = await fetch(url);
+        // let url = 'https://randomuser.me/api/';
+        let url = 'https://yfapi.net/v6/finance/quote/marketSummary?lang=en&region=US&';
+        let config = 
+        {
+            "method": "GET",
+            "headers": {
+                "x-api-key": "ZweTUJui0F3XvMyz8CmJgaLzCKxRxA7l3r0A9EWg"
+            }
+        }
+        const response = await fetch(url, config);
         if(!response.ok){
             let message = `Sorry! An error has occured. ${response.status}`;
-            throw new Error(message)
+            throw new Error(message);
         } else {
             const data = await response.json();
+            let arr = data.marketSummaryResponse.result;
+            console.log(arr)
+            setMarketData(arr);
         }
     }
+
+    // useEffect(()=>getInfo(),[])
 
     return(
         <div>
