@@ -1,23 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route, Link } from "react-router-dom";
+import Login from './login';
+import MarketsList  from './marketsList';
+import {useState} from "react";
 
 function App() {
+  const [loggedIn,setLoggedIn] = useState(false);
+
+  const toggleLogIn = ()=>{
+    let tf = loggedIn ? false : true;
+    console.log(tf)
+    setLoggedIn(tf);
+  }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Welcome!</h1>
+      <Routes>
+        <Route path="/" element={
+          <Login 
+            loggedIn={loggedIn}
+            logIn={toggleLogIn}
+          />
+        }/>
+        <Route path="marketslist" element={<MarketsList />}/>
+      </Routes>
     </div>
   );
 }
