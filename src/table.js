@@ -11,7 +11,7 @@ const Chart = (props) =>{
     const [show,setShow] = useState(false);
 
     const handleClick = (num) => {
-        setRowData(props.marketData[num].exchange);
+        setRowData(props.marketData[num]);
         // console.log(props.marketData[num]);
         console.log(rowData);
         handleShow();
@@ -37,10 +37,10 @@ const Chart = (props) =>{
                 {props.marketData.map((market,index)=>(
                     <tr key={index} onClick={()=>handleClick(index)}>
                         <td>{market.fullExchangeName}</td>
-                        <td>{market.regularMarketChange.raw}</td>
-                        <td>{market.regularMarketChangePercent.raw}</td>
-                        <td>{market.regularMarketPreviousClose.raw}</td>
-                        <td>{market.regularMarketPrice.raw}</td>
+                        <td>{market.regularMarketChange.fmt}</td>
+                        <td>{market.regularMarketChangePercent.fmt}</td>
+                        <td>{market.regularMarketPreviousClose.fmt}</td>
+                        <td>{market.regularMarketPrice.fmt}</td>
                         <td>{market.regularMarketTime.fmt}</td>
                     </tr>
                 ))}
@@ -48,9 +48,19 @@ const Chart = (props) =>{
             </Table>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>{rowData.fullExchangeName}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Body>
+                    <p>Market Short Name: {rowData.shortName}</p>
+                    <p>Market Time: {rowData.regularMarketTime.fmt}</p>
+                    <p>Change Percent: {rowData.regularMarketChangePercent.fmt}</p>
+                    <p>Market Change: {rowData.regularMarketChange.fmt}</p>
+                    <p>Quote Type: {rowData.quoteType}</p>
+                    <p>Exchange Data Delayed By: {rowData.exchangeDataDelayedBy}</p>
+                    <p>Previous Close: {rowData.regularMarketPreviousClose.fmt}</p>
+                    <p>Market Price: {rowData.regularMarketPrice.fmt}</p>
+                    <p>Source Interval: {rowData.sourceInterval}</p>                
+                </Modal.Body>
             </Modal>
         </div>
     )
