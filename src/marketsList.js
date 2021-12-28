@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
-import sample from "./sampleResponse";
 import Chart from "./table";
-import { useAuth0 } from "@auth0/auth0-react";
 
 const MarketsList = (props)=>{
 
-    const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
-    const {logout} = useAuth0;
+    useEffect(()=>getInfo(),[])
+    const [marketData, setMarketData] = useState();
 
     const getInfo = async ()=>{
-        // let url = 'https://randomuser.me/api/';
         let url = 'https://yfapi.net/v6/finance/quote/marketSummary?lang=en&region=US&';
         let config = 
         {
@@ -27,25 +24,18 @@ const MarketsList = (props)=>{
             let arr = data.marketSummaryResponse.result;
             console.log(arr)
             setMarketData(arr);
+            let date = new Date();
+            let time = date.toLocaleTimeString();
+            props.setTime(time);
         }
     }
 
-    const handleLogOut = ()=>{
-        props.logOut();
-        logout({ returnTo: window.location.origin })
-    }
-
-    // useEffect(()=>getInfo(),[])
-
     return(
         <div>
-            {/* <button onClick={props.logOut}>Log Out</button> */}
-            <button onClick={()=>handleLogOut()}>Log Out</button>
-            <button onClick={getInfo}>Click me</button>
-            <Chart 
-                marketData={marketData}
-            />
-
+            {marketData ? <Chart 
+                marketData={marketData} 
+                refreshData={getInfo}
+                /> : null}
         </div>
     )
 }

@@ -36,7 +36,7 @@ const Chart = (props) =>{
                         <td>{market.regularMarketChange.fmt}</td>
                         <td>{market.regularMarketChangePercent.fmt}</td>
                         <td>{market.regularMarketPreviousClose.fmt}</td>
-                        <td>{market.regularMarketPrice.fmt}</td>
+                        <td>${market.regularMarketPrice.fmt}</td>
                         <td>{market.regularMarketTime.fmt}</td>
                     </tr>
                 ))}
@@ -54,8 +54,8 @@ const Chart = (props) =>{
                     <p>Quote Type: {rowData.quoteType}</p>
                     <p>Exchange Data Delayed By: {rowData.exchangeDataDelayedBy}</p>
                     <p>Previous Close: {rowData.regularMarketPreviousClose.fmt}</p>
-                    <p>Market Price: {rowData.regularMarketPrice.fmt}</p>
-                    <p>Source Interval: {rowData.sourceInterval}</p>                
+                    <p>Market Price: ${rowData.regularMarketPrice.fmt}</p>
+                    <p>Source Interval: {rowData.sourceInterval} Seconds</p>                
                 </Modal.Body>
             </Modal>
         </div>
