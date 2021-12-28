@@ -57,3 +57,18 @@ h1, h2{
 #updated>*{
   margin: 5px
 }
+
+#spinner{
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
+}
+
+.filter-inputs{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.filter-inputs input{
+  width: 45%
+}

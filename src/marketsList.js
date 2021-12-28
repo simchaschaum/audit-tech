@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import Chart from "./table";
+import sample from "./sampleResponse";
+import { Spinner } from "react-bootstrap";
 
 const MarketsList = (props)=>{
 
-    useEffect(()=>getInfo(),[])
-    const [marketData, setMarketData] = useState();
+    // useEffect(()=>getInfo(),[])
+    // const [marketData, setMarketData] = useState();
+    const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
 
     const getInfo = async ()=>{
         let url = 'https://yfapi.net/v6/finance/quote/marketSummary?lang=en&region=US&';
@@ -22,7 +25,6 @@ const MarketsList = (props)=>{
         } else {
             const data = await response.json();
             let arr = data.marketSummaryResponse.result;
-            console.log(arr)
             setMarketData(arr);
             let date = new Date();
             let time = date.toLocaleTimeString();
@@ -35,7 +37,13 @@ const MarketsList = (props)=>{
             {marketData ? <Chart 
                 marketData={marketData} 
                 refreshData={getInfo}
-                /> : null}
+                /> : 
+                <div id="spinner">
+                    <Spinner animation="border" role="status" variant="secondary">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>
+                }
         </div>
     )
 }

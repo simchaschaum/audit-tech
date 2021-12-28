@@ -1,12 +1,48 @@
 import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Chart = (props) =>{
 
     const [rowData, setRowData] = useState(props.marketData[0]);
     const [show,setShow] = useState(false);
+    let fa = [
+        {name: "fullExchangeName",
+        filter: ""},
+        {name: "regularMarketChange",
+        filter: {low: "", hi: ""}},
+        {name: "regularMarketChangePercent",
+        filter: {low: "", hi: ""}},
+        {name: "regularMarketPreviousClose",
+        filter: {low: "", hi: ""}},
+        {name: "regularMarketPrice",
+        filter: {low: "", hi: ""}},
+        {name: "regularMarketTime",
+        filter: {low: "", hi: ""}},
+    ]
+    const [filter, setFilter] = useState(fa);
+    const [filteredArr, setFilteredArr] = useState(props.marketData)
+
+    useEffect(()=>{
+        // if filter is empty, revert to full list, from props; 
+        let filterEmpty = true;
+        filter.forEach((item,index)=>{
+            if(index === 0){
+                if(item.filter!==""){
+                    filterEmpty = false;
+                }
+            } else {
+                if(item.filter.low !=="" || item.filter.hi !==""){
+                    filterEmpty = false
+                }
+            }
+        }
+        );
+        if(filterEmpty){
+            setFilteredArr(props.marketData)
+        } 
+    },[props.marketData, filter])
 
     const handleClick = (num) => {
         setRowData(props.marketData[num]);
@@ -15,6 +51,51 @@ const Chart = (props) =>{
 
     const handleShow=()=>setShow(true);
     const handleClose=()=>setShow(false);
+
+    const handleFilterChange = (e) => {
+        let filterCr = e.target.name;
+        let fa = filter;
+        if(filterCr==="0"){
+            fa[filterCr].filter = e.target.value;
+            setFilter([...fa]);
+        } else {
+            let hilow; 
+            let num = filterCr.match(/\d/);
+            if(filterCr.indexOf("hi")>-1){
+                hilow = "hi"
+            } else {
+                hilow = "low"
+            }
+            fa[num].filter[hilow] = e.target.value;
+            setFilter([...fa]);
+        }      
+        handleFilter();
+    }
+
+    const handleFilter = () => {
+        let arr = [];
+        props.marketData.forEach((dataItem, dataIndex) => {
+            let tf = true; 
+            filter.forEach((filterItem, filterIndex)=>{
+                if(filterIndex === 0){
+                    if(dataItem[filterItem.name].toUpperCase().indexOf(filterItem.filter.toUpperCase()) === -1){
+                        tf = false;
+                    };
+                } 
+                else {
+                    if(filterItem.filter.low && parseInt(dataItem[filterItem.name].raw) < parseInt(filterItem.filter.low)){
+                        tf = false;
+                    } else if(filterItem.filter.hi && parseInt(dataItem[filterItem.name].raw) > parseInt(filterItem.filter.hi)){
+                        tf = false;
+                    }
+                }
+            });
+            if(tf){
+                arr.push(dataItem);
+            }
+        })
+        setFilteredArr([...arr]);
+    }
 
     return(
         <div>
@@ -30,14 +111,19 @@ const Chart = (props) =>{
                     </tr>
                 </thead>
                 <tbody>
-                {props.marketData.map((market,index)=>(
-                    <tr key={index} onClick={()=>handleClick(index)}>
+                <tr>
+                    <td><input key={`f-${0}`} name={0} type="text" placeholder="search" onChange={(e)=>handleFilterChange(e)}></input></td>
+                        {filter.map((item, index) => index > 0 && <td><div className='filter-inputs'><input key={`f-${index}`} name={`low-${index}`} placeholder="low" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input>
+                        <input key={index} name={`hi-${index}`} placeholder="high" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input></div></td>)}
+                </tr>
+                {filteredArr.map((market,index)=>(
+                    <tr key={`fa-${index}`} onClick={()=>handleClick(index)}>
                         <td>{market.fullExchangeName}</td>
-                        <td>{market.regularMarketChange.fmt}</td>
-                        <td>{market.regularMarketChangePercent.fmt}</td>
-                        <td>{market.regularMarketPreviousClose.fmt}</td>
-                        <td>${market.regularMarketPrice.fmt}</td>
-                        <td>{market.regularMarketTime.fmt}</td>
+                        <td>{market.regularMarketChange.raw.toFixed(2)}</td>
+                        <td>{market.regularMarketChangePercent.raw.toFixed(2)}%</td>
+                        <td>${market.regularMarketPreviousClose.raw.toFixed(2)}</td>
+                        <td>${market.regularMarketPrice.raw.toFixed(2)}</td>
+                        <td>{new Date(market.regularMarketTime.raw*1000).toDateString()}</td>
                     </tr>
                 ))}
                 </tbody>
@@ -63,3 +149,4 @@ const Chart = (props) =>{
 }
 
 export default Chart;
+
