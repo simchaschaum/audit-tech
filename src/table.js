@@ -113,8 +113,8 @@ const Chart = (props) =>{
                 <tbody>
                 <tr>
                     <td><input key={`f-${0}`} name={0} type="text" placeholder="search" onChange={(e)=>handleFilterChange(e)}></input></td>
-                        {filter.map((item, index) => index > 0 && <td><div className='filter-inputs'><input key={`f-${index}`} name={`low-${index}`} placeholder="low" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input>
-                        <input key={index} name={`hi-${index}`} placeholder="high" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input></div></td>)}
+                        {filter.map((item, index) => index > 0 && <td key={`td-${index}`}><div className='filter-inputs'><input key={`fl-${index}`} name={`low-${index}`} placeholder="low" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input>
+                        <input key={`fh-${index}`} name={`hi-${index}`} placeholder="high" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input></div></td>)}
                 </tr>
                 {filteredArr.map((market,index)=>(
                     <tr key={`fa-${index}`} onClick={()=>handleClick(index)}>
