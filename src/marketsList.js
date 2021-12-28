@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import sample from "./sampleResponse";
 import Chart from "./table";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const MarketsList = (props)=>{
 
     const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
+    const {logout} = useAuth0;
 
     const getInfo = async ()=>{
         // let url = 'https://randomuser.me/api/';
@@ -28,11 +30,17 @@ const MarketsList = (props)=>{
         }
     }
 
+    const handleLogOut = ()=>{
+        props.logOut();
+        logout({ returnTo: window.location.origin })
+    }
+
     // useEffect(()=>getInfo(),[])
 
     return(
         <div>
-            <button onClick={props.logOut}>Log Out</button>
+            {/* <button onClick={props.logOut}>Log Out</button> */}
+            <button onClick={()=>handleLogOut()}>Log Out</button>
             <button onClick={getInfo}>Click me</button>
             <Chart 
                 marketData={marketData}

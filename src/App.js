@@ -14,6 +14,7 @@ function App() {
   return (
     <div className="App">
       <h1>Welcome!</h1>
+      {loggedIn ? "Logged In!" : "Logged Out!"}
       {!loggedIn ?           
           <Login 
             loggedIn={loggedIn}

@@ -3,17 +3,13 @@ import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 
-
-
 const Chart = (props) =>{
 
-    const [rowData, setRowData] = useState();
+    const [rowData, setRowData] = useState(props.marketData[0]);
     const [show,setShow] = useState(false);
 
     const handleClick = (num) => {
         setRowData(props.marketData[num]);
-        // console.log(props.marketData[num]);
-        console.log(rowData);
         handleShow();
     }
 
