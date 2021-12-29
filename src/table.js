@@ -60,12 +60,12 @@ const Chart = (props) =>{
             setFilter([...fa]);
         } else {
             let hilow; 
-            let num = filterCr.match(/\d/);
+            let num = parseInt(filterCr.match(/\d/));
             if(filterCr.indexOf("hi")>-1){
                 hilow = "hi"
             } else {
                 hilow = "low"
-            }
+            };
             fa[num].filter[hilow] = e.target.value;
             setFilter([...fa]);
         }      
@@ -82,10 +82,19 @@ const Chart = (props) =>{
                         tf = false;
                     };
                 } 
-                else {
+                else if (filterIndex < filter.length-1){
                     if(filterItem.filter.low && parseInt(dataItem[filterItem.name].raw) < parseInt(filterItem.filter.low)){
                         tf = false;
                     } else if(filterItem.filter.hi && parseInt(dataItem[filterItem.name].raw) > parseInt(filterItem.filter.hi)){
+                        tf = false;
+                    }
+                } else {
+                    let lowDate = new Date(filterItem.filter.low).getTime();
+                    let hiDate = new Date(filterItem.filter.hi).getTime();
+                    let testDate = dataItem.regularMarketTime.raw*1000;
+                    if(lowDate && testDate < lowDate){
+                        tf = false;
+                    } else if (hiDate && testDate > hiDate){
                         tf = false;
                     }
                 }
@@ -112,9 +121,11 @@ const Chart = (props) =>{
                 </thead>
                 <tbody>
                 <tr>
-                    <td><input key={`f-${0}`} name={0} type="text" placeholder="search" onChange={(e)=>handleFilterChange(e)}></input></td>
-                        {filter.map((item, index) => index > 0 && <td key={`td-${index}`}><div className='filter-inputs'><input key={`fl-${index}`} name={`low-${index}`} placeholder="low" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input>
+                    <td><input name={0} type="text" placeholder="search" onChange={(e)=>handleFilterChange(e)}></input></td>
+                        {filter.map((item, index) => (index > 0 && index < filter.length-1) && <td key={`td-${index}`}><div className='filter-inputs'><input key={`fl-${index}`} name={`low-${index}`} placeholder="low" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input>
                         <input key={`fh-${index}`} name={`hi-${index}`} placeholder="high" className="filter" type="number" onChange={(e)=>handleFilterChange(e)}></input></div></td>)}
+                    <td><div className='filter-inputs'><input className='filter-date' name={`low-${filter.length-1}`} type="date" placeholder="search" onChange={(e)=>handleFilterChange(e)}></input>
+                    <input  className='filter-date' name={`hi-${filter.length-1}`} type="date" placeholder="search" onChange={(e)=>handleFilterChange(e)}></input></div></td>
                 </tr>
                 {filteredArr.map((market,index)=>(
                     <tr key={`fa-${index}`} onClick={()=>handleClick(index)}>
