@@ -42,7 +42,11 @@ const Chart = (props) =>{
         if(filterEmpty){
             setFilteredArr(props.marketData)
         } 
-    },[props.marketData, filter])
+    },[props.marketData, filter]);
+
+    useEffect(()=>{
+        handleFilter();
+    },[filter])
 
     const handleClick = (num) => {
         setRowData(props.marketData[num]);
@@ -69,7 +73,6 @@ const Chart = (props) =>{
             fa[num].filter[hilow] = e.target.value;
             setFilter([...fa]);
         }      
-        handleFilter();
     }
 
     const handleFilter = () => {
