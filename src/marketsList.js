@@ -5,9 +5,9 @@ import { Spinner } from "react-bootstrap";
 
 const MarketsList = (props)=>{
 
-    // useEffect(()=>getInfo(),[])
-    // const [marketData, setMarketData] = useState();
-    const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
+    useEffect(()=>getInfo(),[])
+    const [marketData, setMarketData] = useState();
+    // const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
 
     const getInfo = async ()=>{
         let url = 'https://yfapi.net/v6/finance/quote/marketSummary?lang=en&region=US&';
