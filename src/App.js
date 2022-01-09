@@ -6,7 +6,7 @@ import Loading from './loading';
 import {useState, useEffect, createContext} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from 'react-bootstrap/Button';
-import sample from "./sampleResponse";
+// import sample from "./sampleResponse";
 
 export const MarketDataContext = createContext();
 
@@ -15,8 +15,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [updateTime, setUpdateTime] = useState("");
-  // const [marketData, setMarketData] = useState();
-  const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
+  const [marketData, setMarketData] = useState();
+  // const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
  
@@ -35,7 +35,7 @@ function App() {
       }
   },[isAuthenticated, user, isLoading])
   
-  // useEffect(()=>getInfo(),[])
+  useEffect(()=>getInfo(),[])
 
   const getInfo = async ()=>{
     let url = 'https://yfapi.net/v6/finance/quote/marketSummary?lang=en&region=US&';
