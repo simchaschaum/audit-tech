@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Chart from "./table";
-import sample from "./sampleResponse";
+// import sample from "./sampleResponse";
 import { Spinner } from "react-bootstrap";
 
 const MarketsList = (props)=>{

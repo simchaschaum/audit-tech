@@ -64,7 +64,7 @@ const Chart = (props) =>{
             setFilter([...fa]);
         } else {
             let hilow; 
-            let num = parseInt(filterCr.match(/\d/));
+            let num = Number(filterCr.match(/\d/));
             if(filterCr.indexOf("hi")>-1){
                 hilow = "hi"
             } else {
@@ -86,9 +86,10 @@ const Chart = (props) =>{
                     };
                 } 
                 else if (filterIndex < filter.length-1){
-                    if(filterItem.filter.low && parseInt(dataItem[filterItem.name].raw) < parseInt(filterItem.filter.low)){
+                    console.log(`for low: comparing: ${filterItem.filter.low} and ${Number(dataItem[filterItem.name].raw)}`)
+                    if(filterItem.filter.low && Number(dataItem[filterItem.name].raw) < Number(filterItem.filter.low)){
                         tf = false;
-                    } else if(filterItem.filter.hi && parseInt(dataItem[filterItem.name].raw) > parseInt(filterItem.filter.hi)){
+                    } else if(filterItem.filter.hi && Number(dataItem[filterItem.name].raw) > Number(filterItem.filter.hi)){
                         tf = false;
                     }
                 } else {

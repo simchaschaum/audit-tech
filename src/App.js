@@ -30,6 +30,8 @@ function App() {
       }
   },[isAuthenticated, user, isLoading])
 
+  useEffect(()=>{console.log(userInfo)},[userInfo])
+
   // sets time state for most recent update
   const setTime = (str) => {
     setUpdateTime(str)
