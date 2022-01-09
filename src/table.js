@@ -86,7 +86,6 @@ const Chart = (props) =>{
                     };
                 } 
                 else if (filterIndex < filter.length-1){
-                    console.log(`for low: comparing: ${filterItem.filter.low} and ${Number(dataItem[filterItem.name].raw)}`)
                     if(filterItem.filter.low && Number(dataItem[filterItem.name].raw) < Number(filterItem.filter.low)){
                         tf = false;
                     } else if(filterItem.filter.hi && Number(dataItem[filterItem.name].raw) > Number(filterItem.filter.hi)){
