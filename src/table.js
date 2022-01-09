@@ -1,11 +1,14 @@
 import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import {MarketDataContext} from "./App";
 
-const Chart = (props) =>{
+const Chart = () =>{
 
-    const [rowData, setRowData] = useState(props.marketData[0]);
+    const {marketData} = useContext(MarketDataContext);
+
+    const [rowData, setRowData] = useState(marketData[0]);
     const [show,setShow] = useState(false);
     let fa = [
         {name: "fullExchangeName",
@@ -22,7 +25,7 @@ const Chart = (props) =>{
         filter: {low: "", hi: ""}},
     ]
     const [filter, setFilter] = useState(fa);
-    const [filteredArr, setFilteredArr] = useState(props.marketData)
+    const [filteredArr, setFilteredArr] = useState(marketData)
 
     useEffect(()=>{
         // if filter is empty, revert to full list, from props; 
@@ -40,16 +43,16 @@ const Chart = (props) =>{
         }
         );
         if(filterEmpty){
-            setFilteredArr(props.marketData)
+            setFilteredArr(marketData)
         } 
-    },[props.marketData, filter]);
+    },[marketData, filter]);
 
     useEffect(()=>{
         handleFilter();
     },[filter])
 
     const handleClick = (num) => {
-        setRowData(props.marketData[num]);
+        setRowData(marketData[num]);
         handleShow();
     }
 
@@ -77,7 +80,7 @@ const Chart = (props) =>{
 
     const handleFilter = () => {
         let arr = [];
-        props.marketData.forEach((dataItem, dataIndex) => {
+        marketData.forEach((dataItem, dataIndex) => {
             let tf = true; 
             filter.forEach((filterItem, filterIndex)=>{
                 if(filterIndex === 0){

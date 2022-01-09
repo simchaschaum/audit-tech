@@ -3,10 +3,12 @@ import Login from './login';
 import MarketsList  from './marketsList';
 import User from './user';
 import Loading from './loading';
-import {useState, useEffect} from "react";
+import {useState, useEffect, createContext} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from 'react-bootstrap/Button';
 import sample from "./sampleResponse";
+
+export const MarketDataContext = createContext();
 
 function App() {
   const [loggedIn,setLoggedIn] = useState(false);
@@ -17,7 +19,7 @@ function App() {
   const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
-  
+ 
   // change in authentication status changes state for loading and logged in
   useEffect(()=>{
       if(isLoading){
@@ -76,9 +78,11 @@ function App() {
                   <Button variant="secondary" onClick={getInfo}>Update</Button>
                   <p>Last Updated: {updateTime}</p>
                 </div>
-                <MarketsList 
-                  setTime={(str)=>setUpdateTime(str)}
-                  marketData={marketData}/>
+                <MarketDataContext.Provider value={{marketData}}>
+                  <MarketsList 
+                    setTime={(str)=>setUpdateTime(str)}
+                  />
+                </MarketDataContext.Provider>
               </div>
             }
       </div>
