@@ -6,12 +6,15 @@ import Loading from './loading';
 import {useState, useEffect} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from 'react-bootstrap/Button';
+import sample from "./sampleResponse";
 
 function App() {
   const [loggedIn,setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [updateTime, setUpdateTime] = useState("");
+  // const [marketData, setMarketData] = useState();
+  const [marketData, setMarketData] = useState(sample.marketSummaryResponse.result);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
   
@@ -29,10 +32,30 @@ function App() {
           setLoggedIn(false)
       }
   },[isAuthenticated, user, isLoading])
+  
+  // useEffect(()=>getInfo(),[])
 
-  // sets time state for most recent update
-  const setTime = (str) => {
-    setUpdateTime(str)
+  const getInfo = async ()=>{
+    let url = 'https://yfapi.net/v6/finance/quote/marketSummary?lang=en&region=US&';
+    let config = 
+    {
+        "method": "GET",
+        "headers": {
+            "x-api-key": "ZweTUJui0F3XvMyz8CmJgaLzCKxRxA7l3r0A9EWg"
+        }
+    }
+    const response = await fetch(url, config);
+    if(!response.ok){
+        let message = `Sorry! An error has occured. ${response.status}`;
+        throw new Error(message);
+    } else {
+        const data = await response.json();
+        let arr = data.marketSummaryResponse.result;
+        setMarketData(arr);
+        let date = new Date();
+        let time = date.toLocaleTimeString();
+        setUpdateTime(time);
+    }
   }
 
   return (
@@ -50,10 +73,12 @@ function App() {
                 :
               <div>
                 <div id="updated">
-                  <Button variant="secondary">Update</Button>
+                  <Button variant="secondary" onClick={getInfo}>Update</Button>
                   <p>Last Updated: {updateTime}</p>
                 </div>
-                <MarketsList setTime={(str)=>setTime(str)}/>
+                <MarketsList 
+                  setTime={(str)=>setUpdateTime(str)}
+                  marketData={marketData}/>
               </div>
             }
       </div>
